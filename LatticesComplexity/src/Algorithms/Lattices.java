@@ -9,7 +9,7 @@ public class Lattices {
 	 private static final Random random = new Random();
 
 	 
-	 public static List<List<Integer>> generateOrthogonalBase(int dim, int maxValue) {
+	 public static List<List<Integer>> generateOrthogonalBase(int dim) {
 		    List<List<Integer>> base = new ArrayList<>();
 
 		    // Generar la base ortogonal con valores aleatorios en la diagonal
@@ -19,12 +19,8 @@ public class Lattices {
 		        // Crear un vector (0, ..., 0, val, 0, ..., 0) con 'val' en la posición i-ésima
 		        for (int j = 0; j < dim; j++) {
 		            if (i == j) {
-		                // Generar un valor aleatorio entre -maxValue y maxValue, excluyendo 0
-		                int value;
-		                do {
-		                    value = random.nextInt(2 * maxValue + 1) - maxValue;  // Valor aleatorio en el rango [-maxValue, maxValue]
-		                } while (value == 0);  // Asegurarse de que el valor no sea 0
-		                vector.add(value);
+		                
+		                vector.add(1);
 		            } else {
 		                vector.add(0);  // Los demás elementos son 0
 		            }

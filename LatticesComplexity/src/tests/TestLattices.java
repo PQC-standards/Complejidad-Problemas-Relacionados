@@ -19,14 +19,13 @@ import us.lsi.graphics.MatPlotLib;
 public class TestLattices {
 
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 6; // Dimensión máxima
+    private static Integer nMax = 7; // Dimensión máxima
     private static Integer nIncr = 1; // Incremento de dimensión
-    private static Integer nIter = 20; // Número de iteraciones por medición
+    private static Integer nIter = 2; // Número de iteraciones por medición
     private static Integer range = 5; // Rango de combinaciones [-k, k]
-    private static Integer maxVectorValue = 5; // Mayor Valor que puede tener una coordenada en un vector
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
-    private static Integer noiseStddev = 3; // Desviación estándar para ruido LWE
-    private static Integer numSamples = 100; // Número de muestras LWE
+    private static Integer noiseStddev = 1; // Desviación estándar para ruido LWE
+    private static Integer numSamples = 1000; // Número de muestras LWE
  
     
     public static void genDataSVP() {
@@ -34,7 +33,7 @@ public class TestLattices {
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
-            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim, maxVectorValue); // Base aleatoria
+            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim); // Base aleatoria
             List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, range);
             long startTime = System.nanoTime();
             SVPNaive.findShortestVector(latticePoints);
@@ -52,7 +51,7 @@ public class TestLattices {
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
-            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim, maxVectorValue); // Base aleatoria
+            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim); // Base aleatoria
             List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, range);
             // El punto está fuera del retículo
             List<Integer> randomPoint = Lattices.generateRandomPoint(1000, 1000);
@@ -71,9 +70,9 @@ public class TestLattices {
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
-            List<Integer> secret = LWENaive.generateSecret(dim, maxVectorValue);
-            List<LWESample> samples = LWENaive.generateLWESamples(secret, numSamples, dim, maxVectorValue, noiseStddev);
-            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim, maxVectorValue);
+            List<Integer> secret = Lattices.generateRandomVector(dim, range);
+            List<LWESample> samples = LWENaive.generateLWESamples(secret, numSamples, dim,range, noiseStddev);
+            List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
             List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, range);
 
             long startTime = System.nanoTime();
@@ -125,11 +124,11 @@ public class TestLattices {
     }
 
     public static void main(String[] args) {
-    	//genDataSVP();
-        genDataNVP();
+    //	genDataSVP();
+    //  genDataNVP();
         genDataLWE();
-        showSVP();
-        showNVP();
+    //  showSVP();
+    //  showNVP();
         showLWE();
         showCombined();
     }

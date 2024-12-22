@@ -30,7 +30,7 @@ public class CVPNaive {
 
     // Función principal para probar
     public static void main(String[] args) {
-        List<List<Integer>> base = Lattices.generateOrthogonalBase(2,5); // Base aleatoria en 2 dimensiones
+        List<List<Integer>> base = Lattices.generateOrthogonalBase(2); // Base aleatoria en 2 dimensiones
         System.out.println("Base: " + base);
         int k = 5; // Explorar combinaciones hasta coeficientes en [-5, 5]
         List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, k);

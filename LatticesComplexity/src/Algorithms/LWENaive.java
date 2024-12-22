@@ -8,15 +8,6 @@ import java.util.Random;
 public class LWENaive {
     private static final Random random = new Random();
 
-    // Genera un secreto aleatorio
-    public static List<Integer> generateSecret(int dim, int maxValue) {
-        List<Integer> secret = new ArrayList<>();
-        for (int i = 0; i < dim; i++) {
-            secret.add(random.nextInt(2 * maxValue + 1) - maxValue);
-        }
-        return secret;
-    }
-
 
     // Función para generar muestras LWE
     public static List<LWESample> generateLWESamples(List<Integer> secret, int numSamples, int dim, int maxValue, int noiseStddev) {
@@ -48,7 +39,43 @@ public class LWENaive {
 
         return samples;
     }
+    
     public static List<Integer> solveLWE(List<LWESample> samples, List<List<Integer>> latticePoints, int noiseStddev) {
+        int dim = latticePoints.get(0).size();
+
+        while (true) { // Bucle infinito que solo termina cuando se encuentra una solución
+            try {
+                for (List<Integer> candidate : latticePoints) {
+                    boolean valid = true;
+
+                    for (LWESample sample : samples) {
+                        List<Integer> a = sample.getA();
+                        int b = sample.getB();
+                        int computed = 0;
+
+                        for (int j = 0; j < dim; j++) {
+                            computed += a.get(j) * candidate.get(j);
+                        }
+
+                        if (Math.abs(computed - b) > noiseStddev) {
+                            valid = false;
+                            break;
+                        }
+                    }
+
+                    if (valid) {
+                        return candidate; // Solución encontrada
+                    }
+                }
+            } catch (StackOverflowError e) {
+                System.err.println("Error: StackOverflowError. Retomando ejecución.");
+            }
+
+            
+        }
+    }
+    
+    public static List<Integer> solveLWEFinito(List<LWESample> samples, List<List<Integer>> latticePoints, int noiseStddev) {
         int dim = latticePoints.get(0).size();
         try {
             for (List<Integer> candidate : latticePoints) {
@@ -126,10 +153,10 @@ public class LWENaive {
 
     public static void main(String[] args) {
     
-        int numSamples = 1000;  // Número de muestras a generar
-        int dim = 5;  			// Dimensión del secreto
-        int maxValue = 2;  	// Rango de valores posibles para los elementos de 'a'
-        int noiseStddev = 1;  	// Desviación estándar del ruido
+        int numSamples = 100;  // Número de muestras a generar
+        int dim = 6;  			// Dimensión del secreto
+        int maxValue = 5;  	// Rango de valores posibles para los elementos de 'a'
+        int noiseStddev = 2;  	// Desviación estándar del ruido
         List<Integer> secret = Lattices.generateRandomVector(dim, maxValue);
         System.out.println("El secreto es: "+secret);
         // Generar muestras LWE
@@ -142,7 +169,7 @@ public class LWENaive {
         }
         */
         
-        List<List<Integer>> base=Lattices.generateOrthogonalBase(dim, maxValue);
+        List<List<Integer>> base=Lattices.generateOrthogonalBase(dim);
         List<List<Integer>> latticePoints=Lattices.generateLatticePoints(base, maxValue);
 
         System.out.println("Base del reticulo: "+ base);
