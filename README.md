@@ -53,11 +53,13 @@ Para ejecutar este proyecto necesitaremos realizar una instalacion en local, deb
      
 ## Estructura
 
-Una vez completados los pasos de instalación, puedes utilizar las clases java de este repositorio para explorar y entender las primitivas matemáticas y los problemas relacionados con la criptografía post-cuántica. a continuación se explica la estructura del proyecto:
+Una vez completados los pasos de instalación, puedes utilizar las clases java de este repositorio para explorar y entender las primitivas matemáticas y los problemas relacionados con la criptografía post-cuántica, a continuación se explica la estructura del proyecto:
 
-1. La carpeta src contiene dos paquetes, el primero de ellos es "Algorithms", donde se implementan los algoritmos perse, asi como la clase padre Lattices.java, que auna algunas funcionalidades comunes de los retículos. El segundo paquete "tests" contiene el análisis empírico de la complejidad de cada algoritmo, asi como una comparación entre ellos.
+1. La carpeta src contiene dos paquetes, el primero de ellos es "Algorithms", donde se implementan los algoritmos per se, asi como la clase padre Lattices.java, que auna algunas funcionalidades comunes de los retículos. El segundo paquete "tests" contiene el análisis empírico de la complejidad de cada algoritmo, asi como una comparación entre ellos.
 
-2. Para realizar diversas pruebas, basta con modíficar los parámetros iniciales de la clase, tenga en cuenta que cambios en el tamaño del problema conllevarán un gran impacto en el rendimiento, dada la intratabilidad de los problemas, el aumento de memoría y calculos requeridos será exponencial.
+2. La carpeta ficheros_generados será la responsable de guardar los .txt creados por el programa para luego ser representados en forma de gráfica.
+   
+3. Para realizar diversas pruebas, basta con modíficar los parámetros iniciales de la clase, tenga en cuenta que cambios en el tamaño del problema conllevarán un gran impacto en el rendimiento, dada la intratabilidad de los problemas, el aumento de memoría y calculos requeridos será exponencial.
 
 ## Contribución
 
