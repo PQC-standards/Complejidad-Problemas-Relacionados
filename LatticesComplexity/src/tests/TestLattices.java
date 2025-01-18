@@ -19,9 +19,9 @@ import us.lsi.graphics.MatPlotLib;
 public class TestLattices {
 
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 7; // Dimensión máxima
+    private static Integer nMax = 6; // Dimensión máxima
     private static Integer nIncr = 1; // Incremento de dimensión
-    private static Integer nIter = 2; // Número de iteraciones por medición
+    private static Integer nIter = 10; // Número de iteraciones por medición
     private static Integer range = 5; // Rango de combinaciones [-k, k]
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
     private static Integer noiseStddev = 1; // Desviación estándar para ruido LWE

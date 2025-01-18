@@ -70,8 +70,6 @@ public class LWENaive {
             } catch (StackOverflowError e) {
                 System.err.println("Error: StackOverflowError. Retomando ejecución.");
             }
-
-            
         }
     }
     
@@ -153,8 +151,8 @@ public class LWENaive {
 
     public static void main(String[] args) {
     
-        int numSamples = 100;  // Número de muestras a generar
-        int dim = 6;  			// Dimensión del secreto
+        int numSamples = 6;  // Número de muestras a generar
+        int dim = 6;  		// Dimensión del secreto
         int maxValue = 5;  	// Rango de valores posibles para los elementos de 'a'
         int noiseStddev = 2;  	// Desviación estándar del ruido
         List<Integer> secret = Lattices.generateRandomVector(dim, maxValue);
