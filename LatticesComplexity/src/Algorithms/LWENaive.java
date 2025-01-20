@@ -141,6 +141,7 @@ public class LWENaive {
     }
 
     public static void main(String[] args) {
+
         int numSamples = 200;  // Número de muestras a generar
         int dim = 3;           // Dimensión del secreto
         int q = 101;             // Rango de valores posibles para los elementos de 'a'
@@ -150,7 +151,6 @@ public class LWENaive {
 
         // Generar muestras LWE
         List<LWESample> samples = generateLWESamples(secret, numSamples, dim, q, noiseStddev);
-        
         List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
         List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, q);
 
