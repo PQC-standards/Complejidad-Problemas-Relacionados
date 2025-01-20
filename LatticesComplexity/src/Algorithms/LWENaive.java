@@ -8,30 +8,28 @@ import java.util.Random;
 public class LWENaive {
     private static final Random random = new Random();
 
-
     // Función para generar muestras LWE
-    public static List<LWESample> generateLWESamples(List<Integer> secret, int numSamples, int dim, int maxValue, int noiseStddev) {
+    public static List<LWESample> generateLWESamples(List<Integer> secret, int numSamples, int dim, int q, int noiseStddev) {
         List<LWESample> samples = new ArrayList<>();
-        
         Random rand = new Random();
-        
+
         for (int i = 0; i < numSamples; i++) {
             // Generar vector 'a' aleatorio del retículo
             List<Integer> a = new ArrayList<>();
             for (int j = 0; j < dim; j++) {
-                a.add(rand.nextInt(2 * maxValue + 1) - maxValue);  // Aleatorio en el rango [-maxValue, maxValue]
+                a.add(rand.nextInt(2 * q + 1) - q);  // Aleatorio en el rango [-q, q]
             }
 
             // Calcular b = a * s + e, donde 'e' es el error aleatorio
             int b = 0;
             for (int j = 0; j < dim; j++) {
-                b += a.get(j) * secret.get(j);
+                b = (b + a.get(j) * secret.get(j)) % q;
             }
 
             // Añadir un error pequeño
             // Error en el rango [-noiseStddev, noiseStddev]
             int error = rand.nextInt(2 * noiseStddev + 1) - noiseStddev;
-            b += error;  // Se suma el error
+            b = (b + error) % q;  // Se suma el error y se aplica módulo q
 
             // Crear una muestra LWE con 'a' y 'b'
             samples.add(new LWESample(a, b));
@@ -39,8 +37,8 @@ public class LWENaive {
 
         return samples;
     }
-    
-    public static List<Integer> solveLWE(List<LWESample> samples, List<List<Integer>> latticePoints, int noiseStddev) {
+
+    public static List<Integer> solveLWE(List<LWESample> samples, List<List<Integer>> latticePoints, int q, int noiseStddev) {
         int dim = latticePoints.get(0).size();
 
         while (true) { // Bucle infinito que solo termina cuando se encuentra una solución
@@ -54,10 +52,10 @@ public class LWENaive {
                         int computed = 0;
 
                         for (int j = 0; j < dim; j++) {
-                            computed += a.get(j) * candidate.get(j);
+                            computed = (computed + a.get(j) * candidate.get(j)) % q;
                         }
 
-                        if (Math.abs(computed - b) > noiseStddev) {
+                        if (Math.abs((computed - b) % q) > noiseStddev) {
                             valid = false;
                             break;
                         }
@@ -70,12 +68,10 @@ public class LWENaive {
             } catch (StackOverflowError e) {
                 System.err.println("Error: StackOverflowError. Retomando ejecución.");
             }
-
-            
         }
     }
-    
-    public static List<Integer> solveLWEFinito(List<LWESample> samples, List<List<Integer>> latticePoints, int noiseStddev) {
+
+    public static List<Integer> solveLWEFinito(List<LWESample> samples, List<List<Integer>> latticePoints, int q, int noiseStddev) {
         int dim = latticePoints.get(0).size();
         try {
             for (List<Integer> candidate : latticePoints) {
@@ -85,9 +81,9 @@ public class LWENaive {
                     int b = sample.getB();
                     int computed = 0;
                     for (int j = 0; j < dim; j++) {
-                        computed += a.get(j) * candidate.get(j);
+                        computed = (computed + a.get(j) * candidate.get(j)) % q;
                     }
-                    if (Math.abs(computed - b) > noiseStddev) {
+                    if (Math.abs((computed - b) % q) > noiseStddev) {
                         valid = false;
                         break;
                     }
@@ -101,13 +97,11 @@ public class LWENaive {
         }
         return null;
     }
-    
- // Resolver LWE de manera ingenua (probando puntos del retículo)
-    public static List<Integer> solveLWEDebug(List<LWESample> samples, List<List<Integer>> latticePoints, int noiseStddev) {
+
+    public static List<Integer> solveLWEDebug(List<LWESample> samples, List<List<Integer>> latticePoints, int q, int noiseStddev) {
         int dim = latticePoints.get(0).size(); // Asumimos que todos los puntos tienen la misma dimensión
 
         try {
-            // Probar cada punto de la red como solución potencial
             for (List<Integer> candidate : latticePoints) {
                 System.out.println("Probando el candidato: " + candidate);
                 boolean valid = true;
@@ -117,14 +111,12 @@ public class LWENaive {
                     List<Integer> a = sample.getA();
                     int b = sample.getB();
 
-                    // Calcular a * candidate
                     int computed = 0;
                     for (int j = 0; j < dim; j++) {
-                        computed += a.get(j) * candidate.get(j);
+                        computed = (computed + a.get(j) * candidate.get(j)) % q;
                     }
 
-                    // Verificar si el valor calculado está dentro del margen de error
-                    if (Math.abs(computed - b) > noiseStddev) { // Comparar con el margen
+                    if (Math.abs((computed - b) % q) > noiseStddev) {
                         valid = false;
                         System.out.println("  Falló con a: " + a + ", b: " + b + ", calculado: " + computed);
                         break;
@@ -133,7 +125,6 @@ public class LWENaive {
                     }
                 }
 
-                // Si el candidato es válido para todas las muestras, se devuelve
                 if (valid) {
                     System.out.println("Éxito: El candidato " + candidate + " cumple con todas las muestras.");
                     for (String reason : successReasons) {
@@ -146,35 +137,27 @@ public class LWENaive {
             System.err.println("Error: StackOverflowError. Deteniendo ejecución.");
             return null; // Devolvemos null si ocurre un desbordamiento de pila.
         }
-
-        // Si no se encuentra una solución válida después de probar todos los puntos, se devuelve null
         return null; // No se encontró solución
     }
 
     public static void main(String[] args) {
-    
-        int numSamples = 100;  // Número de muestras a generar
-        int dim = 6;  			// Dimensión del secreto
-        int maxValue = 5;  	// Rango de valores posibles para los elementos de 'a'
-        int noiseStddev = 2;  	// Desviación estándar del ruido
-        List<Integer> secret = Lattices.generateRandomVector(dim, maxValue);
-        System.out.println("El secreto es: "+secret);
-        // Generar muestras LWE
-        List<LWESample> samples = generateLWESamples(secret, numSamples, dim, maxValue, noiseStddev);
-        
-        // Imprimir las muestras generadas
-        /*
-        for (LWESample sample : samples) {
-            System.out.println("a: " + sample.getA() + ", b: " + sample.getB());
-        }
-        */
-        
-        List<List<Integer>> base=Lattices.generateOrthogonalBase(dim);
-        List<List<Integer>> latticePoints=Lattices.generateLatticePoints(base, maxValue);
+        int numSamples = 200;  // Número de muestras a generar
+        int dim = 3;           // Dimensión del secreto
+        int q = 101;             // Rango de valores posibles para los elementos de 'a'
+        int noiseStddev = 0;   // Desviación estándar del ruido
+        List<Integer> secret = Lattices.generateRandomVector(dim, q);
+        System.out.println("El secreto es: " + secret);
 
-        System.out.println("Base del reticulo: "+ base);
+        // Generar muestras LWE
+        List<LWESample> samples = generateLWESamples(secret, numSamples, dim, q, noiseStddev);
+        
+        List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
+        List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, q);
+
+        System.out.println("Base del retículo: " + base);
+
         // Resolver el sistema LWE utilizando la búsqueda de puntos en el retículo
-        List<Integer> recoveredSecret = solveLWE(samples, latticePoints, noiseStddev);
+        List<Integer> recoveredSecret = solveLWE(samples, latticePoints, q, noiseStddev);
 
         // Mostrar el resultado final
         if (recoveredSecret != null) {
@@ -183,6 +166,4 @@ public class LWENaive {
             System.out.println("\nNo se encontró solución válida.");
         }
     }
-
-
 }

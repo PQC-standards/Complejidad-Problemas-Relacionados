@@ -18,15 +18,16 @@ import us.lsi.graphics.MatPlotLib;
 
 public class TestLattices {
 
-	
+	//Testing de commit
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 4; // Dimensión máxima
+    private static Integer nMax = 7; // Dimensión máxima
     private static Integer nIncr = 1; // Incremento de dimensión
-    private static Integer nIter = 2; // Número de iteraciones por medición
+    private static Integer nIter = 20; // Número de iteraciones por medición
     private static Integer range = 5; // Rango de combinaciones [-k, k]
+    private static Integer q= 101;	  // primo que se usa de módulo en LWE
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
-    private static Integer noiseStddev = 1; // Desviación estándar para ruido LWE
-    private static Integer numSamples = 1000; // Número de muestras LWE
+    private static Integer noiseStddev = 0; // Desviación estándar para ruido LWE
+    private static Integer numSamples = 100; // Número de muestras LWE
  
     
     public static void genDataSVP() {
@@ -71,13 +72,13 @@ public class TestLattices {
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
-            List<Integer> secret = Lattices.generateRandomVector(dim, range);
-            List<LWESample> samples = LWENaive.generateLWESamples(secret, numSamples, dim,range, noiseStddev);
+            List<Integer> secret = Lattices.generateRandomVector(dim, q);
+            List<LWESample> samples = LWENaive.generateLWESamples(secret, numSamples, dim,q, noiseStddev);
             List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
-            List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, range);
+            List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, q);
 
             long startTime = System.nanoTime();
-            LWENaive.solveLWE(samples, latticePoints,noiseStddev);
+            LWENaive.solveLWE(samples, latticePoints,q,noiseStddev);
             long endTime = System.nanoTime();
 
             return endTime - startTime;
