@@ -6,9 +6,9 @@
 [Gabriel Vacaro Goytia](https://github.com/Gabrielvcg) (gabvacgoy@alum.us.es)  
 [Ignacio Warleta Murcia](https://github.com/ignaciowarleta) (ignwarmur@alum.us.es) <br>
 
-En este repositorio se encuentra el proyecto en java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
+En este repositorio se encuentra el proyecto en Java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
 
-Este repositorio hace uso de el repositorio de Miguel Toro https://github.com/migueltoro/adda_v3.git, en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
+Este repositorio hace uso de el repositorio de Miguel Toro ([https://github.com/migueltoro/adda_v3.git](https://github.com/migueltoro/adda_v3.git)), en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
 
 ## Contenido
 
