@@ -8,7 +8,7 @@
 
 En este repositorio se encuentra el proyecto en Java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
 
-Este repositorio hace uso de el repositorio de Miguel Toro ([https://github.com/migueltoro/adda_v3.git](https://github.com/migueltoro/adda_v3.git)), en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
+Este repositorio hace uso de el repositorio de [Miguel Toro](https://github.com/migueltoro) ([https://github.com/migueltoro/adda_v3.git](https://github.com/migueltoro/adda_v3.git)), en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
 
 ## Contenido
 
