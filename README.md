@@ -7,7 +7,7 @@
 [Ignacio Warleta Murcia](https://github.com/ignaciowarleta) (ignwarmur@alum.us.es) <br>
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2dc3eb4f8d604b33960753f39d6b5a5b)](https://app.codacy.com/gh/PQC-standards/Complejidad-Problemas-Relacionados/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![Java](https://img.shields.io/badge/java-22-blue)
+![Java](https://img.shields.io/badge/Java-22-blue)
 ![Versión](https://img.shields.io/badge/versión-1.0.0-blue)
 ![Última actualización](https://img.shields.io/github/last-commit/PQC-standards/Complejidad-Problemas-Relacionados)
 
