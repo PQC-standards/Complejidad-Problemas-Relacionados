@@ -9,8 +9,8 @@ public class CVPNaive {
 
     // Función para encontrar el vector más cercano al punto objetivo t
     public static List<Integer> findClosestVector(List<List<Integer>> latticePoints, List<Integer> targetPoint) {
-        List<Integer> nearestVector = null;
-        double nearestDistance = Double.MAX_VALUE;
+        List<Integer> closestVector = null;
+        double closestDistance = Double.MAX_VALUE;
 
         // Compara todos los puntos de la red con el punto objetivo t
         for (List<Integer> point : latticePoints) {
@@ -19,13 +19,13 @@ public class CVPNaive {
             double distance = Lattices.calculateNorm(vector); // Calcular la distancia entre t y el punto de la red
 
             // Si la distancia es la menor encontrada, actualizamos el vector más cercano
-            if (distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestVector = point; // Guardamos el punto más cercano
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestVector = point; // Guardamos el punto más cercano
             }
         }
 
-        return nearestVector;
+        return closestVector;
     }
 
     // Función principal para probar
