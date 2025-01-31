@@ -8,7 +8,7 @@ public class CVPNaive {
 
 
     // Función para encontrar el vector más cercano al punto objetivo t
-    public static List<Integer> findNearestVector(List<List<Integer>> latticePoints, List<Integer> targetPoint) {
+    public static List<Integer> findClosestVector(List<List<Integer>> latticePoints, List<Integer> targetPoint) {
         List<Integer> nearestVector = null;
         double nearestDistance = Double.MAX_VALUE;
 
@@ -43,7 +43,7 @@ public class CVPNaive {
         System.out.println("Punto objetivo t: " + targetPoint);
 
         // Encontrar el vector más cercano al punto t
-        List<Integer> nearestVector = findNearestVector(latticePoints, targetPoint);
+        List<Integer> nearestVector = findClosestVector(latticePoints, targetPoint);
         System.out.println("Vector más cercano: " + nearestVector);
     }
 }

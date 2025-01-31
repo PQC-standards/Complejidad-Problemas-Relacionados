@@ -1,7 +1,6 @@
 package Algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -17,19 +16,19 @@ public class LWENaive {
             // Generar vector 'a' aleatorio del retículo
             List<Integer> a = new ArrayList<>();
             for (int j = 0; j < dim; j++) {
-                a.add(rand.nextInt(2 * q + 1) - q);  // Aleatorio en el rango [-q, q]
+                a.add(rand.nextInt(q));  // Aleatorio en el rango [-q, q]
             }
 
             // Calcular b = a * s + e, donde 'e' es el error aleatorio
             int b = 0;
             for (int j = 0; j < dim; j++) {
-                b = (b + a.get(j) * secret.get(j)) % q;
+                b = ((b + a.get(j) * secret.get(j))+q) % q;
             }
 
             // Añadir un error pequeño
             // Error en el rango [-noiseStddev, noiseStddev]
             int error = rand.nextInt(2 * noiseStddev + 1) - noiseStddev;
-            b = (b + error) % q;  // Se suma el error y se aplica módulo q
+            b = (b + error+q) % q;  // Se suma el error y se aplica módulo q
 
             // Crear una muestra LWE con 'a' y 'b'
             samples.add(new LWESample(a, b));
@@ -52,7 +51,7 @@ public class LWENaive {
                         int computed = 0;
 
                         for (int j = 0; j < dim; j++) {
-                            computed = (computed + a.get(j) * candidate.get(j)) % q;
+                            computed = ((computed + a.get(j) * candidate.get(j))+q) % q;
                         }
 
                         if (Math.abs((computed - b) % q) > noiseStddev) {
@@ -81,7 +80,7 @@ public class LWENaive {
                     int b = sample.getB();
                     int computed = 0;
                     for (int j = 0; j < dim; j++) {
-                        computed = (computed + a.get(j) * candidate.get(j)) % q;
+                        computed = ((computed + a.get(j) * candidate.get(j))+q) % q;
                     }
                     if (Math.abs((computed - b) % q) > noiseStddev) {
                         valid = false;
@@ -113,7 +112,7 @@ public class LWENaive {
 
                     int computed = 0;
                     for (int j = 0; j < dim; j++) {
-                        computed = (computed + a.get(j) * candidate.get(j)) % q;
+                        computed = ((computed + a.get(j) * candidate.get(j))+q) % q;
                     }
 
                     if (Math.abs((computed - b) % q) > noiseStddev) {
@@ -142,17 +141,17 @@ public class LWENaive {
 
     public static void main(String[] args) {
 
-        int numSamples = 200;  // Número de muestras a generar
-        int dim = 3;           // Dimensión del secreto
-        int q = 101;             // Rango de valores posibles para los elementos de 'a'
+        int numSamples = 10;  // Número de muestras a generar
+        int dim = 5;           // Dimensión del secreto
+        int q = 11;             // Rango de valores posibles para los elementos de 'a'
         int noiseStddev = 0;   // Desviación estándar del ruido
-        List<Integer> secret = Lattices.generateRandomVector(dim, q);
+        List<Integer> secret = Lattices.generateRandomSecret(dim, q);
         System.out.println("El secreto es: " + secret);
 
         // Generar muestras LWE
         List<LWESample> samples = generateLWESamples(secret, numSamples, dim, q, noiseStddev);
         List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
-        List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, q);
+        List<List<Integer>> latticePoints = Lattices.generateLatticePointsLWE(base, q);
 
         System.out.println("Base del retículo: " + base);
 

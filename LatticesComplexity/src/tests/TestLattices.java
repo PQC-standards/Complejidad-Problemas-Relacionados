@@ -20,9 +20,9 @@ public class TestLattices {
 
 	
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 6; // Dimensión máxima
+    private static Integer nMax = 4; // Dimensión máxima
     private static Integer nIncr = 1; // Incremento de dimensión
-    private static Integer nIter = 10; // Número de iteraciones por medición
+    private static Integer nIter = 5; // Número de iteraciones por medición
     private static Integer range = 5; // Rango de combinaciones [-k, k]
     private static Integer q= 101;	  // primo que se usa de módulo en LWE
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
@@ -48,8 +48,8 @@ public class TestLattices {
         GenData.tiemposEjecucionAritmetica(f1, file, nMin, nMax, nIncr, nIter, warmup);
     }
 
-    public static void genDataNVP() {
-        String file = "ficheros_generados/NVP.txt";
+    public static void genDataCVP() {
+        String file = "ficheros_generados/CVP.txt";
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
@@ -58,7 +58,7 @@ public class TestLattices {
             // El punto está fuera del retículo
             List<Integer> randomPoint = Lattices.generateRandomPoint(1000, 1000);
             long startTime = System.nanoTime();
-            CVPNaive.findNearestVector(latticePoints, randomPoint);
+            CVPNaive.findClosestVector(latticePoints, randomPoint);
             long endTime = System.nanoTime();
 
             return endTime - startTime;
@@ -72,10 +72,10 @@ public class TestLattices {
 
         // Función que mide el tiempo de ejecución
         Function<Integer, Long> f1 = dim -> {
-            List<Integer> secret = Lattices.generateRandomVector(dim, q);
+            List<Integer> secret = Lattices.generateRandomSecret(dim, q);
             List<LWESample> samples = LWENaive.generateLWESamples(secret, numSamples, dim,q, noiseStddev);
             List<List<Integer>> base = Lattices.generateOrthogonalBase(dim);
-            List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, q);
+            List<List<Integer>> latticePoints = Lattices.generateLatticePointsLWE(base, q);
 
             long startTime = System.nanoTime();
             LWENaive.solveLWE(samples, latticePoints,q,noiseStddev);
@@ -98,8 +98,8 @@ public class TestLattices {
         MatPlotLib.show(file, pl.getFunction(), pl.getExpression());
     }
 
-    public static void showNVP() {
-        String file = "ficheros_generados/NVP.txt";
+    public static void showCVP() {
+        String file = "ficheros_generados/CVP.txt";
         List<WeightedObservedPoint> data = DataFile.points(file);
         Fit pl = Exponential.of();
         pl.fit(data);
@@ -120,17 +120,17 @@ public class TestLattices {
 
     public static void showCombined() {
         MatPlotLib.showCombined("Tiempos",
-                List.of("ficheros_generados/SVP.txt", "ficheros_generados/NVP.txt", "ficheros_generados/LWE.txt"),
-                List.of("SVP", "NVP", "LWE"));
+                List.of("ficheros_generados/SVP.txt", "ficheros_generados/CVP.txt", "ficheros_generados/LWE.txt"),
+                List.of("SVP", "CVP", "LWE"));
 
     }
 
     public static void main(String[] args) {
-    //	genDataSVP();
-    //  genDataNVP();
-        genDataLWE();
-    //  showSVP();
-    //  showNVP();
+    	//genDataSVP();
+    	//genDataCVP();
+    	//genDataLWE();
+    	showSVP();
+      	showCVP();
         showLWE();
         showCombined();
     }
