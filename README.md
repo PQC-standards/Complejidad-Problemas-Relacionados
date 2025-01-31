@@ -6,6 +6,11 @@
 [Gabriel Vacaro Goytia](https://github.com/Gabrielvcg) (gabvacgoy@alum.us.es)  
 [Ignacio Warleta Murcia](https://github.com/ignaciowarleta) (ignwarmur@alum.us.es) <br>
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2dc3eb4f8d604b33960753f39d6b5a5b)](https://app.codacy.com/gh/PQC-standards/Complejidad-Problemas-Relacionados/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+![Java](https://img.shields.io/badge/Java-22-blue)
+![Versión](https://img.shields.io/badge/versión-1.0.0-blue)
+![Última actualización](https://img.shields.io/github/last-commit/PQC-standards/Complejidad-Problemas-Relacionados)
+
 En este repositorio se encuentra el proyecto en Java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
 
 Este repositorio hace uso de el repositorio de [Miguel Toro](https://github.com/migueltoro) ([https://github.com/migueltoro/adda_v3.git](https://github.com/migueltoro/adda_v3.git)), en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
