@@ -12,38 +12,35 @@ public class CVPNaive {
         List<Integer> closestVector = null;
         double closestDistance = Double.MAX_VALUE;
 
-        // Compara todos los puntos de la red con el punto objetivo t
         for (List<Integer> point : latticePoints) {
-            // Calcula el vector que va de t a cada punto de la red
+        	//Calcula el vector que une ambos puntos
             List<Integer> vector = Lattices.subtractVectors(point, targetPoint);
-            double distance = Lattices.calculateNorm(vector); // Calcular la distancia entre t y el punto de la red
+            double distance = Lattices.calculateNorm(vector); 
 
-            // Si la distancia es la menor encontrada, actualizamos el vector más cercano
             if (distance < closestDistance) {
                 closestDistance = distance;
-                closestVector = point; // Guardamos el punto más cercano
+                closestVector = vector; 
             }
         }
-
         return closestVector;
     }
 
-    // Función principal para probar
     public static void main(String[] args) {
-        List<List<Integer>> base = Lattices.generateOrthogonalBase(2); // Base aleatoria en 2 dimensiones
+    	int dim = 5;
+        int k = 5;
+        // base y puntos del reticulo
+        List<List<Integer>> base = Lattices.generateOrthogonalBase(dim); 
         System.out.println("Base: " + base);
-        int k = 5; // Explorar combinaciones hasta coeficientes en [-5, 5]
         List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, k);
         System.out.println("Lattice Points: " + latticePoints);
 
-        // Definir el punto objetivo t
-        List<Integer> targetPoint = new ArrayList<>();
-        targetPoint.add(2); // x = 1
-        targetPoint.add(2); // y = 2
+        // Punto objetivo en el rango [-1000,1000]
+        List<Integer> targetPoint = Lattices.generateRandomPoint(dim,1000 );
         System.out.println("Punto objetivo t: " + targetPoint);
 
-        // Encontrar el vector más cercano al punto t
-        List<Integer> nearestVector = findClosestVector(latticePoints, targetPoint);
-        System.out.println("Vector más cercano: " + nearestVector);
+        // vector mas cercano al punto objetivo
+        List<Integer> closestVector = findClosestVector(latticePoints, targetPoint);
+        System.out.println("Vector más cercano: " + closestVector);
+        System.out.println("Norma del vector más cercano: " + Lattices.calculateNorm(closestVector));
     }
 }

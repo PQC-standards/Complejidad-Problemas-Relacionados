@@ -6,21 +6,30 @@ import java.util.Random;
 
 public class Lattices {
 
+	
+	public static void main(String args[]) {
+		List<List<Integer>> base = generateOrthogonalBase(6);
+		System.out.println("tiempo en calcular los puntos del reticulo:");
+		long startTime = System.nanoTime();
+		generateLatticePoints(base,10);
+        long endTime = System.nanoTime();
+        System.out.println((endTime-startTime)/ 1_000_000_000.0 +" segundos");
+
+	}
+	
 	 private static final Random random = new Random();
 
-	 
+	 //Funcion para generar una base ortogonal:
 	 public static List<List<Integer>> generateOrthogonalBase(int dim) {
 		    List<List<Integer>> base = new ArrayList<>();
 
-		    // Generar la base ortogonal con valores aleatorios en la diagonal
 		    for (int i = 0; i < dim; i++) {
 		        List<Integer> vector = new ArrayList<>();
 		        
-		        // Crear un vector (0, ..., 0, val, 0, ..., 0) con 'val' en la posición i-ésima
 		        for (int j = 0; j < dim; j++) {
 		            if (i == j) {
 		                
-		                vector.add(1);
+		                vector.add(1);  // 1 en la diagonal principal
 		            } else {
 		                vector.add(0);  // Los demás elementos son 0
 		            }
@@ -49,86 +58,98 @@ public class Lattices {
     public static double calculateNorm(List<Integer> vector) {
         return Math.sqrt(vector.stream().mapToDouble(x -> x * x).sum());
     }
-    
-    // Función para generar puntos del lattice (todos los puntos con coeficientes en [-k, k])
+        
+    // Funcion para calcular los puntos del retículo en rango [-k,k] dada una base
     public static List<List<Integer>> generateLatticePoints(List<List<Integer>> base, int k) {
         List<List<Integer>> latticePoints = new ArrayList<>();
-        generateRecursive(base, k, new ArrayList<>(), latticePoints, 0);
+        int dimensions = base.get(0).size();
+        int[] point = new int[dimensions]; // Array reutilizable para mejorar eficiencia
+        generateRecursive(base, k, new int[base.size()], 0, point, latticePoints);
         return latticePoints;
     }
 
-    // Método recursivo para generar los puntos del lattice
-    private static void generateRecursive(List<List<Integer>> base, int k, List<Integer> coefficients,
-                                          List<List<Integer>> latticePoints, int depth) {
+    private static void generateRecursive(List<List<Integer>> base, int k, int[] coefficients, 
+                                          int depth, int[] point, List<List<Integer>> latticePoints) {
         if (depth == base.size()) {
-            List<Integer> point = new ArrayList<>();
-            for (int i = 0; i < base.get(0).size(); i++) {
-                int coordinate = 0;
-                for (int j = 0; j < base.size(); j++) {
-                    coordinate += coefficients.get(j) * base.get(j).get(i);
-                }
-                point.add(coordinate);
+            // Se almacena una copia del punto calculado
+            List<Integer> finalPoint = new ArrayList<>();
+            for (int value : point) {
+                finalPoint.add(value);
             }
-            latticePoints.add(point);
+            latticePoints.add(finalPoint);
             return;
         }
+
         for (int i = -k; i <= k; i++) {
-            List<Integer> newCoefficients = new ArrayList<>(coefficients);
-            newCoefficients.add(i);
-            generateRecursive(base, k, newCoefficients, latticePoints, depth + 1);
+            coefficients[depth] = i;
+
+            // Actualizar el punto en la iteración actual sin recalcular desde cero
+            for (int j = 0; j < point.length; j++) {
+                point[j] += i * base.get(depth).get(j);
+            }
+
+            generateRecursive(base, k, coefficients, depth + 1, point, latticePoints);
+
+            // Deshacer la actualización antes de la siguiente iteración
+            for (int j = 0; j < point.length; j++) {
+                point[j] -= i * base.get(depth).get(j);
+            }
         }
     }
     
-    
- // Función para generar puntos del lattice LWE (todos los puntos con coeficientes en [0, q-1])
+    // Funcion para calcular los puntos del retículo en rango [0,q] dada una base (pensado para LWE)
     public static List<List<Integer>> generateLatticePointsLWE(List<List<Integer>> base, int q) {
         List<List<Integer>> latticePoints = new ArrayList<>();
-        generateRecursiveLWE(base, q, new ArrayList<>(), latticePoints, 0);
+        int dimensions = base.get(0).size();
+        int[] point = new int[dimensions]; // Array reutilizable para almacenar las coordenadas
+        generateRecursiveLWE(base, q, new int[base.size()], 0, point, latticePoints);
         return latticePoints;
     }
 
-    // Método recursivo para generar los puntos del lattice LWE
-    private static void generateRecursiveLWE(List<List<Integer>> base, int q, List<Integer> coefficients,
-                                             List<List<Integer>> latticePoints, int depth) {
+    private static void generateRecursiveLWE(List<List<Integer>> base, int q, int[] coefficients,
+                                             int depth, int[] point, List<List<Integer>> latticePoints) {
         if (depth == base.size()) {
-            List<Integer> point = new ArrayList<>();
-            // Calcular la coordenada de cada punto en el lattice
-            for (int i = 0; i < base.get(0).size(); i++) {
-                int coordinate = 0;
-                for (int j = 0; j < base.size(); j++) {
-                    coordinate += coefficients.get(j) * base.get(j).get(i);
-                }
-                // Tomar módulo q para que la coordenada esté en el rango [0, q-1]
-                point.add((coordinate % q + q) % q);  // Para manejar negativos correctamente
+            // Convertir `point` a una lista y agregarla al resultado
+            List<Integer> finalPoint = new ArrayList<>();
+            for (int value : point) {
+                finalPoint.add((value + q) % q);
             }
-            latticePoints.add(point);
+            latticePoints.add(finalPoint);
             return;
         }
 
-        // Modificar el rango para que los coeficientes estén en [0, q-1]
-        for (int i = 0; i < q; i++) {  // Aquí cambiamos [-k, k] por [0, q-1]
-            List<Integer> newCoefficients = new ArrayList<>(coefficients);
-            newCoefficients.add(i);
-            generateRecursiveLWE(base, q, newCoefficients, latticePoints, depth + 1);
+        for (int i = 0; i < q; i++) {
+            coefficients[depth] = i;
+
+            // Actualizar el punto sin recalcular desde cero
+            for (int j = 0; j < point.length; j++) {
+                point[j] += i * base.get(depth).get(j);
+            }
+
+            generateRecursiveLWE(base, q, coefficients, depth + 1, point, latticePoints);
+
+            // Deshacer la actualización antes de la siguiente iteración
+            for (int j = 0; j < point.length; j++) {
+                point[j] -= i * base.get(depth).get(j);
+            }
         }
     }
 
     
-    
-    // Función para generar un punto aleatorio en Z^dim (espacio de dimensión 'dim') con valores en el rango [-maxValue, maxValue]
-    public static List<Integer> generateRandomPoint(int dim, int maxValue) {
+    // Función para generar un punto aleatorio en Z^dim con valores en el rango [-k, k]
+    public static List<Integer> generateRandomPoint(int dim, int k) {
         List<Integer> point = new ArrayList<>();
         for (int i = 0; i < dim; i++) {
-            point.add((int) (Math.random() * (2 * maxValue + 1)) - maxValue); // Valores aleatorios entre -maxValue y maxValue
+            point.add((int) (Math.random() * (2 * k + 1)) - k);
         }
         return point;
     }
     
- // Generar un vector aleatorio
-    public static List<Integer> generateRandomVector(int dim, int maxValue) {
+ // Generar un vector aleatorio en Z^dim con valores en el rango [-k, k]
+    public static List<Integer> generateRandomVector(int dim, int k) {
         List<Integer> vector = new ArrayList<>();
         for (int i = 0; i < dim; i++) {
-            vector.add(random.nextInt(2 * maxValue + 1) - maxValue);
+            vector.add(random.nextInt(2 * k + 1) - k);
         }
         return vector;
     }
@@ -137,11 +158,9 @@ public class Lattices {
     public static List<Integer> generateRandomSecret(int dim, int q) {
         List<Integer> secret = new ArrayList<>();
         for (int i = 0; i < dim; i++) {
-            secret.add(random.nextInt(q));  // Genera un valor aleatorio entre 0 y q-1
+            secret.add(random.nextInt(q)); 
         }
         return secret;
     }
-    
-    
     
 }

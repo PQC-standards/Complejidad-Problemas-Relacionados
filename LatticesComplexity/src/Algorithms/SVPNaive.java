@@ -10,7 +10,6 @@ public class SVPNaive {
         List<Integer> shortestVector = null;
         double shortestNorm = Double.MAX_VALUE;
 
-        // Compara todos los pares de puntos en latticePoints
         for (int i = 0; i < latticePoints.size(); i++) {
             for (int j = i + 1; j < latticePoints.size(); j++) {
                 List<Integer> vector = Lattices.subtractVectors(latticePoints.get(j), latticePoints.get(i));
@@ -27,9 +26,12 @@ public class SVPNaive {
     }
    
     public static void main(String[] args) {
-        List<List<Integer>> base = Lattices.generateOrthogonalBase(2); // Base aleatoria en 2 dimensiones
+    	int dim = 3;
+    	int k = 5; // Explorar combinaciones hasta coeficientes en [-k, k]
+    	
+    	//Base y puntos de lreticulo
+        List<List<Integer>> base = Lattices.generateOrthogonalBase(dim); // Base aleatoria en 2 dimensiones
         System.out.println("Base: " + base);
-        int k = 5; // Explorar combinaciones hasta coeficientes en [-5, 5]
         List<List<Integer>> latticePoints = Lattices.generateLatticePoints(base, k);
         System.out.println("Lattice Points: " + latticePoints);
 
