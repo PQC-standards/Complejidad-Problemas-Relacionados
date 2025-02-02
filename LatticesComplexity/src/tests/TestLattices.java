@@ -23,8 +23,8 @@ public class TestLattices {
     private static Integer nMax = 4; // Dimensión máxima
     private static Integer nIncr = 1; // Incremento de dimensión
     private static Integer nIter = 5; // Número de iteraciones por medición
-    private static Integer range = 5; // Rango de combinaciones [-k, k]
-    private static Integer q= 101;	  // primo que se usa de módulo en LWE
+    private static Integer range = 5; // Rango del reticulo [-k, k]
+    private static Integer q= 11;	  // primo que se usa de módulo en LWE && rango en el reticulo para LWE
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
     private static Integer noiseStddev = 0; // Desviación estándar para ruido LWE
     private static Integer numSamples = 100; // Número de muestras LWE
