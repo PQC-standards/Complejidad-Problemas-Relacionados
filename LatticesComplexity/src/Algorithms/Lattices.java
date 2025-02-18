@@ -97,7 +97,7 @@ public class Lattices {
         }
     }
     
-    // Funcion para calcular los puntos del retículo en rango [0,q] dada una base (pensado para LWE)
+    // Funcion para calcular los puntos del retículo en rango [0,q) dada una base (pensado para LWE)
     public static List<List<Integer>> generateLatticePointsLWE(List<List<Integer>> base, int q) {
         List<List<Integer>> latticePoints = new ArrayList<>();
         int dimensions = base.get(0).size();
