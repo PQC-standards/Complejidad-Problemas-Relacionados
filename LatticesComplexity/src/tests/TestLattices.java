@@ -20,14 +20,14 @@ public class TestLattices {
 
 	
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 5; // Dimensión máxima (no incluida)
+    private static Integer nMax = 7; // Dimensión máxima (no incluida)
     private static Integer nIncr = 1; // Incremento de dimensión
     private static Integer nIter = 10; // Número de iteraciones por medición
     private static Integer range = 6; // Rango del reticulo [-k, k]
     private static Integer q= 13;	  // primo que se usa de módulo en LWE && rango en el reticulo para LWE
     private static Integer warmup = 1000; // Calentamiento para saturar la caché
     private static Integer noiseStddev = 1; // Desviación estándar para ruido LWE
-    private static Integer numSamples = 100; // Número de muestras LWE
+    private static Integer numSamples = 10; // Número de muestras LWE
  
     
     public static void genDataSVP() {
@@ -78,7 +78,7 @@ public class TestLattices {
             List<List<Integer>> latticePoints = Lattices.generateLatticePointsLWE(base, q);
 
             long startTime = System.nanoTime();
-            LWENaive.solveLWE(samples, latticePoints,q,noiseStddev);
+            LWENaive.solveLWEFinito(samples, latticePoints,q,noiseStddev);
             long endTime = System.nanoTime();
 
             return endTime - startTime;
@@ -126,12 +126,13 @@ public class TestLattices {
     }
 
     public static void main(String[] args) {
-    	genDataSVP();
+    	//genDataSVP();
     	//genDataCVP();
     	//genDataLWE();
-    	showSVP();
+    	//showSVP();
       	//showCVP();
-       // showLWE();
-        //showCombined();
+       
+    	//showLWE();
+        showCombined();
     }
 }

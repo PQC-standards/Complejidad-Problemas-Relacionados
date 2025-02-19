@@ -139,9 +139,9 @@ public class LWENaive {
     public static void main(String[] args) {
 
         int numSamples = 10;  // Número de muestras a generar
-        int dim = 4;           // Dimensión del secreto
+        int dim = 5;           // Dimensión del secreto
         int q = 31;             // Rango de valores posibles para los elementos de 'a'
-        int noiseStddev = 2;   // Desviación estándar del ruido
+        int noiseStddev = 1;   // Desviación estándar del ruido
         List<Integer> secret = Lattices.generateRandomSecret(dim, q);
         System.out.println("El secreto es: " + secret);
 
