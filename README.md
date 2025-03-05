@@ -11,7 +11,7 @@
 ![Versión](https://img.shields.io/badge/versión-1.0.0-blue)
 ![Última actualización](https://img.shields.io/github/last-commit/PQC-standards/Complejidad-Problemas-Relacionados)
 
-En este repositorio se encuentra el proyecto en Java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
+En este repositorio se encuentra el Anexo 9: Análisis empírico de la complejidad. Un proyecto en Java encargado de el análisis empírico de la complejidad de los algoritmos CVP, SVP y LWE, todos desde el punto de vista de un ataque a fuerza bruta.
 
 Este repositorio hace uso de el repositorio de [Miguel Toro](https://github.com/migueltoro) ([https://github.com/migueltoro/adda_v3.git](https://github.com/migueltoro/adda_v3.git)), en concreto del proyecto ParteComun, este deberá ser importado y añadido al Build Path del proyecto LatticeComplexity.
 
