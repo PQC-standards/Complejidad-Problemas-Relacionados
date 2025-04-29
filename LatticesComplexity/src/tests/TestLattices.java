@@ -20,7 +20,7 @@ public class TestLattices {
 
 	
     private static Integer nMin = 1;  // Dimensión mínima
-    private static Integer nMax = 7; // Dimensión máxima (no incluida)
+    private static Integer nMax = 4; // Dimensión máxima (no incluida)
     private static Integer nIncr = 1; // Incremento de dimensión
     private static Integer nIter = 10; // Número de iteraciones por medición
     private static Integer range = 6; // Rango del reticulo [-k, k]
@@ -126,13 +126,14 @@ public class TestLattices {
     }
 
     public static void main(String[] args) {
-    	//genDataSVP();
-    	//genDataCVP();
-    	//genDataLWE();
-    	//showSVP();
-      	//showCVP();
-       
-    	//showLWE();
+    	genDataSVP();
+    	genDataCVP();
+    	genDataLWE();
+    	
+    	showSVP();
+      	showCVP();
+    	showLWE();
+    	
         showCombined();
     }
 }

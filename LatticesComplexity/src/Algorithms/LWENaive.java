@@ -139,7 +139,7 @@ public class LWENaive {
     public static void main(String[] args) {
 
         int numSamples = 10;  // Número de muestras a generar
-        int dim = 5;           // Dimensión del secreto
+        int dim = 4;           // Dimensión del secreto
         int q = 31;             // Rango de valores posibles para los elementos de 'a'
         int noiseStddev = 1;   // Desviación estándar del ruido
         List<Integer> secret = Lattices.generateRandomSecret(dim, q);
@@ -151,7 +151,7 @@ public class LWENaive {
 
         System.out.println("Base del retículo: " + base);
 
-        List<Integer> recoveredSecret = solveLWEFinito(samples, latticePoints, q, noiseStddev);
+        List<Integer> recoveredSecret = solveLWEDebug(samples, latticePoints, q, noiseStddev);
 
         // Mostrar el resultado final
         if (recoveredSecret != null) {
